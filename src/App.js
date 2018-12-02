@@ -23,7 +23,10 @@ const client = new ApolloClient({
   link: new HttpLink({uri: 'https://gpgsql.herokuapp.com/v1alpha1/graphql'}),
   cache: new InMemoryCache(),
 });
-const VEHICLE_DATA_API = 'http://cdc483e2.ngrok.io/api/MercedesRequest?query_type=location&vehicle_id=7DCF6CF3B96B2E3442';
+
+const VEHICLE_DATA_API = 'http://d0283219.ngrok.io/api/MercedesRequest?query_type=location&vehicle_id=7DCF6CF3B96B2E3442';
+const VEHICLE_TIRES_API = 'http://d0283219.ngrok.io/api/MercedesRequest?query_type=tires&vehicle_id=7DCF6CF3B96B2E3442';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -32,11 +35,12 @@ class App extends Component {
       vehicleData: null,
       vehicleLoading: false,
       vehicleError: null,
-      showPostJobModal: false
+      showPostJobModal: false,
+      extraInfo: null
     };
   }
 
-  /*async componentDidMount() {
+  async componentDidMount() {
     this.setState({vehicleLoading: true});
     try {
       const res = await axios(VEHICLE_DATA_API);
@@ -44,7 +48,15 @@ class App extends Component {
     } catch (e) {
       this.setState({vehicleLoading: false, vehicleError: e});
     }
-  }*/
+
+    try {
+      const res = await axios(VEHICLE_TIRES_API);
+      console.log('extra', res.data)
+      this.setState({ extraInfo: res.data, vehicleLoading: false });
+    } catch (e) {
+      this.setState({vehicleLoading: false, vehicleError: e});
+    }
+  }
 
   handlePostJob = () => {
     this.setState((prevState) => ({showPostJobModal: !prevState.showPostJobModal}));
@@ -57,7 +69,7 @@ class App extends Component {
         <ApolloProvider client={client}>
           <Header handlePostJob={this.handlePostJob}/>
           <FormModal open={this.state.showPostJobModal} onClose={this.handlePostJob} />
-          {vehicleError ? "there is a network error" : <VehicleMapContainer data={this.state.vehicleData} vehicleLoading={this.state.vehicleLoading}/>}
+          {vehicleError ? "there is a network error" : <VehicleMapContainer extraInfo={this.state.extraInfo} data={this.state.vehicleData} vehicleLoading={this.state.vehicleLoading}/>}
           <DriverList />
         </ApolloProvider>
       </div>

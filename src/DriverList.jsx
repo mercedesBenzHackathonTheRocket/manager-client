@@ -15,6 +15,7 @@ const DRIVERS_QUERY = gql`{
         name
         surname
         experience
+        image_url
     }
 }
 `;
@@ -28,12 +29,13 @@ export default class DriverList extends Component {
             show: false,
             name: null,
             surname: null,
-            experience: 0
+            experience: 0,
+            image_url:null
         }
     }
 
-    handleSelect = (name, surname, experience) => {
-        this.setState({show: true, name, surname, experience});
+    handleSelect = (name, surname, experience, image_url) => {
+        this.setState({show: true, name, surname, experience, image_url});
     }
     
     handleReject = (name, surname) => {
@@ -59,10 +61,8 @@ export default class DriverList extends Component {
                 onCancel = {() => this.handleReject(this.state.name, this.state.surname)}
                 onConfirm = {() => this.handleAccept(this.state.name, this.state.surname)}
             >
-                <Avatar isSolid name={this.state.name + " " + this.state.surname} size={40} />
-                <div>
-                    {this.state.experience + " years of experience."}
-                </div>
+                <Avatar isSolid src={this.state.image_url} size={80} />
+                <div style={{marginBottom: '20px'}}>{this.state.experience + " years of experience."}</div>
             </Dialog>
             </Pane>
             <Query query={DRIVERS_QUERY}>
@@ -89,7 +89,7 @@ export default class DriverList extends Component {
                             </Table.Head>
                             <Table.Body height={240}>
                             {drivers.map(driver => (
-                                <Table.Row key={driver.id} isSelectable onSelect={() => this.handleSelect(driver.name, driver.surname, driver.experience)}>
+                                <Table.Row key={driver.id} isSelectable onSelect={() => this.handleSelect(driver.name, driver.surname, driver.experience, driver.image_url)}>
                                 <Table.TextCell>{driver.name}</Table.TextCell>
                                 <Table.TextCell>{driver.surname}</Table.TextCell>
                                 <Table.TextCell>{driver.experience}</Table.TextCell>

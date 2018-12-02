@@ -1,5 +1,6 @@
 import React from "react";
 import VehicleMap from "./VehicleMap";
+import MapWithAMakredInfoWindow from "./VehicleMap";
 
 const MAP_API_KEY = "AIzaSyDFz1mFqY6E2oiw5X661_Xnah9Wmofh1Ag";
 const mode = 'driving';
@@ -15,7 +16,9 @@ export default class VehicleMapContainer extends React.Component {
 				loadingElement={<div style={{ height: `100%` }} />}
 				containerElement={<div style={{ height: `420px`, width: '100%' }} />}
                 mapElement={<div style={{ height: `100%` }} />}
-                vehicleLoading={this.props.vehicleLoading}
+				vehicleLoading={this.props.vehicleLoading}
+				data={this.props.data}
+				extraInfo={this.props.extraInfo}
 			/>
 		);
 	}

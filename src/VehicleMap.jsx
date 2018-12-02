@@ -5,18 +5,19 @@ import VehicleMarker from "./VehicleMarker";
 
 const VehicleMap = withScriptjs(withGoogleMap((props) =>{
     
-    //const vehicles = props.vehicleLoading ? null : props.data;
-    const vehicles = [
-        {id: 1, lat: 19, lon: 23},
-        {id: 2, lat: 22, lon: -10}
-    ]
+    const vehicles = props.vehicleLoading ? null : props.data;
+
+    console.log(props.data)
+    console.log(props.vehicleLoading)
+    console.log("here", props.extraInfo)
 
     let markers = null;
-    if (vehicles !== null){
-        markers = vehicles.map( vehicle => <VehicleMarker
-            key={vehicle.id}
-            vehicle={vehicle}
-            location={{lat: vehicle.lat, lng: vehicle.lon}}
+    if (vehicles != null){
+        markers = (<VehicleMarker
+            key={vehicles.latitude.value + " " + vehicles.longitude.value}
+            vehicle={vehicles}
+            extraInfo={props.extraInfo}
+            location={{lat: vehicles.latitude.value, lng: vehicles.longitude.value}}
         />);
     }
 
@@ -26,7 +27,7 @@ const VehicleMap = withScriptjs(withGoogleMap((props) =>{
           defaultZoom={5}
           center={ { lat:  42.3601, lng: -71.0589 } }
           >
-          {vehicles === null ? "Loading" : markers}
+          {vehicles == null || props.extraInfo == null ? "Loading" : markers}
         </GoogleMap>
       );
     }
