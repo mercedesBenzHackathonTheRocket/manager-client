@@ -11,6 +11,9 @@ import JobPost from './JobPost.jsx';
 import VehicleMapContainer from './VehicleMapContainer.jsx';
 import axios from 'axios'
 
+import Header from './Header.jsx'
+import FormModal from './FormModal.jsx';
+
 const client = new ApolloClient({
   // By default, this client will send queries to the
   //  `/graphql` endpoint on the same host
@@ -28,7 +31,8 @@ class App extends Component {
     this.state = {
       vehicleData: null,
       vehicleLoading: false,
-      vehicleError: null
+      vehicleError: null,
+      showPostJobModal: false
     };
   }
 
@@ -42,11 +46,17 @@ class App extends Component {
     }
   }*/
 
+  handlePostJob = () => {
+    this.setState((prevState) => ({showPostJobModal: !prevState.showPostJobModal}));
+  }
+
   render() {
     const {vehicleError} = this.state;
     return (
       <div className="App">
         <ApolloProvider client={client}>
+          <Header handlePostJob={this.handlePostJob}/>
+          <FormModal open={this.state.showPostJobModal} onClose={this.handlePostJob} />
           {vehicleError ? "there is a network error" : <VehicleMapContainer data={this.state.vehicleData} vehicleLoading={this.state.vehicleLoading}/>}
           <DriverList />
         </ApolloProvider>

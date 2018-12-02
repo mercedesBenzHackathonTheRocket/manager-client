@@ -7,10 +7,10 @@ import { Textarea } from 'evergreen-ui';
 import { Mutation } from "react-apollo";
 import gql from 'graphql-tag';
 
-/*const INSERT_QUERY = gql`
+const INSERT_QUERY = gql`
     mutation addJob($id: Int!, $company_id: Int!, $model: String!, $description: String!, 
             $source: String!, $destination: String!, $time: Int!, 
-            $experience: Int!, $cargo: String!, $capacity: Int!) {
+            $experience: Int!, $cargo: String!, $capacity: Int!, $done: Boolean!) {
         insertJob (
                 objects: [ 
                     {
@@ -23,14 +23,14 @@ import gql from 'graphql-tag';
                     time: $time,
                     experience: $experience,
                     cargo: $cargo,
-                    capacity: $capacity
+                    capacity: $capacity,
+                    done: $done
                     }
                 ]  
-            ) { }
+            )
         }
-        `;
-*/
-const INSERT_QUERY = "";
+      `;
+
 export default class JobPost extends Component {
     constructor (props) {
         super(props)
@@ -51,7 +51,7 @@ export default class JobPost extends Component {
     render() {
         return (
             <div>
-                <Combobox
+                {/*<Combobox
                     style={{marginBottom: '5px'}}
                     items={['Banana', 'Orange', 'Apple', 'Mango']}
                     onChange={selected => this.setState({cargo: selected})}
@@ -74,10 +74,31 @@ export default class JobPost extends Component {
                     items={['Banana', 'Orange', 'Apple', 'Mango']}
                     onChange={selected => this.setState({destination: selected})}
                     placeholder="Destination"
-                    autocompleteProps={{
-                        title: 'Destination'
-                    }}
-                />
+                />*/}
+                <div>
+                <TextInput
+                    style={{marginBottom: '5px'}}
+                    name="text-input-name"
+                    placeholder="Cargo"
+                    onChange={e => this.setState({ cargo: e.target.value })}
+                    />
+                </div>
+                <div>
+                <TextInput
+                    style={{marginBottom: '5px'}}
+                    name="text-input-name"
+                    placeholder="Source"
+                    onChange={e => this.setState({ source: e.target.value })}
+                    />
+                </div>
+                <div>
+                <TextInput
+                    style={{marginBottom: '5px'}}
+                    name="text-input-name"
+                    placeholder="Destination"
+                    onChange={e => this.setState({ destination: e.target.value })}
+                    />
+                </div>
                 <div>
                 <TextInput
                     style={{marginBottom: '5px'}}
@@ -123,7 +144,7 @@ export default class JobPost extends Component {
                     name="textarea-1"
                     placeholder="Description"
                     onChange={e => this.setState({ description: e.target.value })}
-                    width='10%'
+                    width='100%'
                     style={{marginBottom: '5px'}}
                     />
                 </div>
@@ -134,14 +155,15 @@ export default class JobPost extends Component {
                 <Button appearance="primary" style={{marginBottom: '5px'}} onClick={() => insertJob({variables: {
                         id: 23,
                         company_id: 1,
-                        cargo: this.state.cargo,
+                        model: this.state.model,
+                        description: this.state.description,
                         source: this.state.source,
                         destination: this.state.destination,
                         time: 333,
-                        model: this.state.model,
+                        experience: this.state.experience,
+                        cargo: this.state.cargo,
                         capacity: this.state.jobNo,
-                        description: this.state.description,
-                        experience: this.state.experience
+                        done: false,
                     }})
                 } >Submit</Button>
                 )}
